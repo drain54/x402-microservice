@@ -71,7 +71,12 @@ def run_agent_workflow():
     # 3. Agent Signs EIP-3009 TransferWithAuthorization
     print("\n[Step 3] Authorizing Micropayment via EIP-3009 Typed Signature")
     # Ephemeral or configured test wallet
-    private_key = os.getenv("AGENT_WALLET_KEY", "0x4f3edf983ac636a65a762ce438096f9da7db5ac0732b0e079fb94f456c7fa299")
+    # Generate ephemeral key if none provided
+    raw_key = os.getenv("AGENT_WALLET_KEY")
+    if not raw_key:
+        import secrets
+        raw_key = "0x" + secrets.token_hex(32)
+    private_key = raw_key
     agent_acct = Account.from_key(private_key)
     print(f"  Agent Wallet Address: {agent_acct.address}")
 
